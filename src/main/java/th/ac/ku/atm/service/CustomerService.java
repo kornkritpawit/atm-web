@@ -1,7 +1,9 @@
 package th.ac.ku.atm.service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import th.ac.ku.atm.data.CustomerRepository;
 import th.ac.ku.atm.model.Customer;
 
 import java.util.ArrayList;
@@ -11,16 +13,25 @@ import java.util.List;
 public class CustomerService {
 // responsible for processing and managing
 //    customer information
-    private List<Customer> customerList = new ArrayList<>();
+
+//    private List<Customer> customerList = new ArrayList<>();
+    private CustomerRepository repository;
+
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
+    }
 
     public void createCustomer(Customer customer) {
         String hashedPin = hash(customer.getPin());
         customer.setPin(hashedPin);
-        customerList.add(customer);
+//        customerList.add(customer);
+        repository.save(customer);
     }
 
     public List<Customer> getCustomers() {
-        return new ArrayList<>(customerList);
+//        return new ArrayList<>(customerList);
+        return repository.findAll();
+
     }
 
     private String hash(String pin) {
@@ -30,11 +41,17 @@ public class CustomerService {
     }
 
     public Customer findCustomer(int id) {
-        for (Customer customer : customerList) {
-            if (customer.getId() == id)
-                return customer;
+//        for (Customer customer : customerList) {
+//            if (customer.getId() == id)
+//                return customer;
+//        }
+//        return null;
+        try {
+            return repository.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
-        return null;
+
     }
 
     public Customer checkPin(Customer inputCustomer) {
