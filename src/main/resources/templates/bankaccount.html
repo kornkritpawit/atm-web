@@ -40,6 +40,8 @@
             <th>Name</th>
             <th>Pin</th>
             <th>Balance</th>
+            <th>Actions</th>
+
         </tr>
         </thead>
         <tbody>
@@ -48,6 +50,10 @@
             <td th:text="${bankaccount.customerId}"></td>
             <td th:text="${bankaccount.type}"></td>
             <td th:text="${bankaccount.balance}"></td>
+            <td>
+                <a class="btn btn-primary"
+                   th:href="@{/bankaccount/edit/{id}(id=${bankaccount.id})}">Edit</a>
+            </td>
         </tr>
         </tbody>
     </table>
