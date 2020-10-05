@@ -1,9 +1,11 @@
 package th.ac.ku.atm.controller;
 
+import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import th.ac.ku.atm.model.BankAccount;
+import th.ac.ku.atm.model.Money;
 import th.ac.ku.atm.service.BankAccountService;
 
 @Controller
@@ -46,7 +48,32 @@ public class BankAccountController {
         return "redirect:/bankaccount";
     }
 
+    @PostMapping("/deposit/{id}")
+    public String depositAccount(@PathVariable int id,
+                                 @ModelAttribute Money money,
+                                 Model model) {
+        accountService.depositBankAccount(id, money);
+        model.addAttribute("bankaccounts",accountService.getBankAccounts());
+        return "redirect:/bankaccount";
+    }
 
+    @PostMapping("/withdraw/{id}")
+    public String withdrawBankAccount(@PathVariable int id,
+                                 @ModelAttribute Money money,
+                                 Model model) {
+        accountService.withdrawBankAccount(id, money);
+        model.addAttribute("bankaccounts",accountService.getBankAccounts());
+        return "redirect:/bankaccount";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteAccount(@PathVariable int id,
+                                @ModelAttribute BankAccount bankAccount,
+                                Model model) {
+        accountService.deleteBankAccount(id);
+        model.addAttribute("bankaccounts",accountService.getBankAccounts());
+        return "redirect:/bankaccount";
+    }
 
 //    @GetMapping
 //    public String getBankAccountPage(Model model) {

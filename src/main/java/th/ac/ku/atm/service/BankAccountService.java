@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import th.ac.ku.atm.model.BankAccount;
+import th.ac.ku.atm.model.Money;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class BankAccountService {
 
         ResponseEntity<BankAccount> response =
                 restTemplate.getForEntity(url, BankAccount.class);
+        System.out.println(response);
 
         return response.getBody();
     }
@@ -69,5 +71,19 @@ public class BankAccountService {
         restTemplate.put(url, bankAccount);
     }
 
+    public void depositBankAccount(int id, Money money) {
+        String url = "http://localhost:8091/api/bankaccount/deposit/" + id;
+        restTemplate.put(url, money);
+    }
+
+    public void withdrawBankAccount(int id, Money money) {
+        String url = "http://localhost:8091/api/bankaccount/withdraw/" + id;
+        restTemplate.put(url, money);
+    }
+
+    public void deleteBankAccount(int id) {
+        String url = "http://localhost:8091/api/bankaccount/" + id;
+        restTemplate.delete(url);
+    }
 
 }
